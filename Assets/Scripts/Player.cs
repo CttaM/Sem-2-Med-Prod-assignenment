@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     AudioSource _moneySound;
     private GameManager _gameManager;
     private GameObject[] Houses;
+    private List<GameObject> HousesBought = new List<GameObject>();
     private GameObject HouseText;
     private GameObject SpotLight;
     
@@ -47,15 +48,34 @@ public class Player : MonoBehaviour
 
         if (nearest != null && min <= 15)
         {
-            _gameManager.UpdateHouseText("Buy house for £100");
-            Debug.Log("can buy");
+            
+            //Debug.Log("can buy");
             SpotLight.SetActive(true);
             SpotLight.transform.position = nearest.transform.position + new Vector3(0,25,0);
-            
+
+            if (!HousesBought.Contains(nearest))
+            {
+                SpotLight.GetComponent<Light>().color = Color.green;
+                _gameManager.UpdateHouseText("Buy house for £100 (press Enter)");               
+            }
+            else
+            {
+                SpotLight.GetComponent<Light>().color = Color.red;
+                _gameManager.UpdateHouseText("You bought this house");
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (!HousesBought.Contains(nearest))
+                {
+                    HousesBought.Add(nearest);
+                    Debug.Log("House bought");
+                }
+            }
         }
         else
         {
-            Debug.Log("not house found" + min);
+            //Debug.Log("not house found" + min);
             _gameManager.UpdateHouseText("");
             SpotLight.SetActive(false);
         }
