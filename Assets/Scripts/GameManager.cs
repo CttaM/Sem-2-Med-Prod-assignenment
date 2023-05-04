@@ -29,5 +29,5 @@ public class GameManager : MonoBehaviour
     {
         houseText.text = text;
     }
-
+   
 }

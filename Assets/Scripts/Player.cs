@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private int _score = 0;
+    private int _price = 10;
     AudioClip _clip;
     AudioSource _moneySound;
     private GameManager _gameManager;
@@ -56,7 +57,7 @@ public class Player : MonoBehaviour
             if (!HousesBought.Contains(nearest))
             {
                 SpotLight.GetComponent<Light>().color = Color.green;
-                _gameManager.UpdateHouseText("Buy house for £100 (press Enter)");               
+                _gameManager.UpdateHouseText($"Buy house for £{_price} (press Enter)");               
             }
             else
             {
@@ -68,8 +69,13 @@ public class Player : MonoBehaviour
             {
                 if (!HousesBought.Contains(nearest))
                 {
-                    HousesBought.Add(nearest);
-                    Debug.Log("House bought");
+                    
+                    if (_score >= _price)
+                    {
+                        HousesBought.Add(nearest);
+                        _score -= _price;
+                        _gameManager.UpdateScore(_score);
+                    }
                 }
             }
         }
@@ -99,7 +105,4 @@ public class Player : MonoBehaviour
         }
         
     }
-
-
-
 }
