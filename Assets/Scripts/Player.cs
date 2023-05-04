@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     private GameManager _gameManager;
     private GameObject[] Houses;
     private GameObject HouseText;
-
+    private GameObject SpotLight;
     
     // Start is called before the first frame update
     void Start()
@@ -19,15 +19,9 @@ public class Player : MonoBehaviour
         _moneySound = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Text pop up").GetComponent<GameManager>();
         Houses = GameObject.FindGameObjectsWithTag("House");
-
-
-        if (Houses != null)
-        {
-            Debug.Log("Houses" + Houses.Length);
-        }
-
-        HouseText = GameObject.FindGameObjectWithTag("BuyHousetext");
-        
+        SpotLight = GameObject.FindGameObjectWithTag("spotLight");
+        SpotLight.SetActive(false);
+        HouseText = GameObject.FindGameObjectWithTag("BuyHousetext");        
     }
 
     // Update is called once per frame
@@ -55,11 +49,15 @@ public class Player : MonoBehaviour
         {
             _gameManager.UpdateHouseText("Buy house for £100");
             Debug.Log("can buy");
+            SpotLight.SetActive(true);
+            SpotLight.transform.position = nearest.transform.position + new Vector3(0,25,0);
+            
         }
         else
         {
             Debug.Log("not house found" + min);
             _gameManager.UpdateHouseText("");
+            SpotLight.SetActive(false);
         }
     }
 
