@@ -9,8 +9,8 @@ public class Player : MonoBehaviour
     private int _price = 10;
     AudioClip _clip;
     AudioSource _moneySound;
-    private GameManager _gameManager;
-    private GameObject[] Houses;
+    private GameManager _gameManager;    
+    private List<GameObject[]> HouseTypes = new List<GameObject[]>();
     private List<GameObject> HousesBought = new List<GameObject>();
     private GameObject HouseText;
     private GameObject SpotLight;
@@ -20,7 +20,11 @@ public class Player : MonoBehaviour
     {
         _moneySound = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Text pop up").GetComponent<GameManager>();
-        Houses = GameObject.FindGameObjectsWithTag("House");
+        HouseTypes.Add (GameObject.FindGameObjectsWithTag("House"));
+        HouseTypes.Add (GameObject.FindGameObjectsWithTag("Low houses"));
+        HouseTypes.Add(GameObject.FindGameObjectsWithTag("Big House"));
+        Debug.Log("types " + HouseTypes.Count);
+        Debug.Log("houses" + HouseTypes[1].Length);
         SpotLight = GameObject.FindGameObjectWithTag("spotLight");
         SpotLight.SetActive(false);
         HouseText = GameObject.FindGameObjectWithTag("BuyHousetext");        
@@ -33,24 +37,40 @@ public class Player : MonoBehaviour
 
         double min = 1.0e6;
         GameObject nearest = null;
-        if (Houses != null)
+        if (HouseTypes != null)
         {
-            foreach (var House in Houses)
+            foreach (var Type in HouseTypes)
             {
-                double distance = Vector3.Distance(House.transform.position, transform.position);
-                if (distance <= min)
+                foreach (var House in Type)
                 {
-                    nearest = House;
-                    min = distance;
+                    double distance = Vector3.Distance(House.transform.position, transform.position);
+                    if (distance <= min)
+                    {
+                        nearest = House;
+                        min = distance;
+                    }
                 }
-            }
+            }            
         }
 
 
         if (nearest != null && min <= 15)
         {
-            
+            if (nearest.CompareTag("Low houses"))
+            {
+                _price = 50;
+            }
+            else if(nearest.CompareTag("House"))
+            {
+                _price = 100;
+            }
+            else
+            {
+                _price = 200;
+            }
+
             //Debug.Log("can buy");
+
             SpotLight.SetActive(true);
             SpotLight.transform.position = nearest.transform.position + new Vector3(0,25,0);
 
@@ -83,7 +103,7 @@ public class Player : MonoBehaviour
         {
             //Debug.Log("not house found" + min);
             _gameManager.UpdateHouseText("");
-            SpotLight.SetActive(false);
+            //SpotLight.SetActive(false);
         }
     }
 
