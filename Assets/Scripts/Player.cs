@@ -95,6 +95,7 @@ public class Player : MonoBehaviour
                         HousesBought.Add(nearest);
                         _score -= _price;
                         _gameManager.UpdateScore(_score);
+                        _gameManager.UpdateHouseCount(HousesBought.Count);
                     }
                 }
             }

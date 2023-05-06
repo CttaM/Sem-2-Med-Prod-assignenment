@@ -7,11 +7,12 @@ public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI houseText;
+    public TextMeshProUGUI countText;
     // Start is called before the first frame update
     void Start()
     {
         scoreText.text = "Money: ";
-        //houseText.text = "ddhsdg fbcsjkd";
+        
     }
 
     // Update is called once per frame
@@ -31,6 +32,11 @@ public class GameManager : MonoBehaviour
     public void UpdateHouseText(string text)
     {
         houseText.text = text;
+    }
+
+    public void UpdateHouseCount (int count)
+    {
+        countText.text = "Houses bought: " + count;
     }
    
 }
